@@ -1,0 +1,6 @@
+{
+  "name": "Journal PDF Downloader and Archiver",
+  "description": "A smart downloader and compiler for journal archives and volumes, with native macOS local folder synchronization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
