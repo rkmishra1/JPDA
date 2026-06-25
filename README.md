@@ -2,16 +2,7 @@
 
 <br>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://img.icons8.com/fluency/96/bookmark-documents.png">
-  <img alt="JPDA" src="https://img.icons8.com/fluency/96/bookmark-documents.png" width="80">
-</picture>
-
-<br>
-
-# Journal PDF Downloader & Archiver
-
-### Bulk-download academic journal PDFs into organized local folders<br>powered by Gemini AI extraction.
+<img alt="JPDA" src="assets/logo.png" width="600">
 
 <br>
 
