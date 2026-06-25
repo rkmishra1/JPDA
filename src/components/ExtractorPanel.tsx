@@ -11,7 +11,6 @@ import {
   Cpu,
   Search,
   BookOpen,
-  Plus,
   Bookmark
 } from "lucide-react";
 import { JournalData } from "../types";
@@ -45,7 +44,6 @@ export default function ExtractorPanel({ onJournalExtracted, onNavigateToExplore
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchedJournal[]>([]);
-  const [isGeneratingVolumes, setIsGeneratingVolumes] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
 
   const steps = [
@@ -160,58 +158,6 @@ export default function ExtractorPanel({ onJournalExtracted, onNavigateToExplore
       setSearchError(err.message || "Failed to search the academic journal database.");
     } finally {
       setIsSearching(false);
-    }
-  };
-
-  const handleImportSearchedJournal = async (journal: SearchedJournal) => {
-    setIsGeneratingVolumes(true);
-    setSearchError(null);
-    setResult(null);
-
-    try {
-      const response = await fetch("/api/generate-journal-volumes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(journal),
-      });
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || "Failed to generate volume structures.");
-      }
-
-      const data: JournalData = await response.json();
-
-      const cleanedYears = (data.years || []).map((y) => ({
-        ...y,
-        volumes: (y.volumes || []).map((v) => ({
-          ...v,
-          issues: (v.issues || []).map((i) => ({
-            ...i,
-            id: `${data.journalTitle}/${y.year}/${v.volumeName}/${i.issueName}`.replace(/\s+/g, "_"),
-            status: "idle" as const,
-            progress: 0,
-          })),
-        })),
-      }));
-
-      const finalData: JournalData = {
-        journalTitle: data.journalTitle,
-        publisher: data.publisher || "Unknown Publisher",
-        category: data.category || journal.category || "Other",
-        issn: data.issn || journal.issn || "N/A",
-        years: cleanedYears,
-      };
-
-      setResult(finalData);
-      onJournalExtracted(finalData);
-    } catch (err: any) {
-      console.error(err);
-      setSearchError(err.message || "Failed to generate functional download archive structure.");
-    } finally {
-      setIsGeneratingVolumes(false);
     }
   };
 
@@ -469,14 +415,7 @@ export default function ExtractorPanel({ onJournalExtracted, onNavigateToExplore
                         <p className="text-[10px] text-[#28C840] font-mono font-medium">{j.subjectField}</p>
                       </div>
 
-                      <button
-                        onClick={() => handleImportSearchedJournal(j)}
-                        disabled={isGeneratingVolumes}
-                        className="flex items-center space-x-1 bg-[#1E1E1E] hover:bg-[#2A2A2A] text-white border border-[#2A2A2A] rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer"
-                      >
-                        <Plus className="w-3.5 h-3.5 text-[#28C840]" />
-                        <span>Build Archive</span>
-                      </button>
+                      <span className="text-[10px] text-[#8E8E93] italic">Paste this journal's page source in the HTML tab to build an archive</span>
                     </div>
                   ))}
                 </div>
@@ -517,19 +456,6 @@ export default function ExtractorPanel({ onJournalExtracted, onNavigateToExplore
                     </div>
                   );
                 })}
-              </div>
-            </div>
-          )}
-
-          {/* Active Search Structure Generation State */}
-          {isGeneratingVolumes && (
-            <div className="bg-[#161616] border border-[#2A2A2A] rounded-2xl p-5 text-center space-y-4">
-              <Loader2 className="w-7 h-7 text-[#28C840] animate-spin mx-auto" />
-              <div className="space-y-1">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">Compiling Dynamic Volume Archives</h4>
-                <p className="text-[11px] text-[#8E8E93] max-w-xs mx-auto">
-                  Gemini is constructing real-world volume directories and mock-download routes matching the selected register.
-                </p>
               </div>
             </div>
           )}
@@ -605,7 +531,7 @@ export default function ExtractorPanel({ onJournalExtracted, onNavigateToExplore
           )}
 
           {/* Idle Guidance */}
-          {!isExtracting && !isGeneratingVolumes && !result && (
+          {!isExtracting && !result && (
             <div className="bg-[#161616] border border-[#2A2A2A] rounded-2xl p-5 space-y-3.5">
               <h3 className="text-[10px] font-bold text-[#8E8E93] uppercase tracking-widest flex items-center space-x-1.5">
                 <Bookmark className="w-3.5 h-3.5 text-[#28C840]" />

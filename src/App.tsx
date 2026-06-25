@@ -62,9 +62,6 @@ export default function App() {
           portalUrl: "",
           cookies: "",
           customHeaders: "",
-          username: "",
-          password: "",
-          autoChooseOpenAthens: true,
         };
   });
 
@@ -321,9 +318,6 @@ export default function App() {
               url: targetIssue.pdfUrl,
               cookies: openAthensConfig.cookies,
               customHeaders: headersToSend,
-              username: openAthensConfig.username,
-              password: openAthensConfig.password,
-              autoChooseOpenAthens: openAthensConfig.autoChooseOpenAthens,
             }),
           });
 

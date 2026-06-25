@@ -1,5 +1,5 @@
 import { useState, FormEvent } from "react";
-import { KeyRound, HelpCircle, Shield, Check, FileCode, AlertCircle, Sparkles } from "lucide-react";
+import { KeyRound, HelpCircle, Check, FileCode, AlertCircle, Sparkles } from "lucide-react";
 import { OpenAthensConfig } from "../types";
 
 interface OpenAthensPanelProps {
@@ -12,9 +12,6 @@ export default function OpenAthensPanel({ config, onUpdateConfig }: OpenAthensPa
   const [portalUrl, setPortalUrl] = useState(config.portalUrl);
   const [cookies, setCookies] = useState(config.cookies);
   const [customHeaders, setCustomHeaders] = useState(config.customHeaders);
-  const [username, setUsername] = useState(config.username || "");
-  const [password, setPassword] = useState(config.password || "");
-  const [autoChooseOpenAthens, setAutoChooseOpenAthens] = useState(config.autoChooseOpenAthens !== false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showHowTo, setShowHowTo] = useState(true);
 
@@ -25,9 +22,6 @@ export default function OpenAthensPanel({ config, onUpdateConfig }: OpenAthensPa
       portalUrl,
       cookies,
       customHeaders,
-      username,
-      password,
-      autoChooseOpenAthens,
     });
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
@@ -40,12 +34,8 @@ export default function OpenAthensPanel({ config, onUpdateConfig }: OpenAthensPa
         <div>
           <h2 className="text-2xl font-bold text-white tracking-tight">OpenAthens & Publisher Session</h2>
           <p className="text-xs text-[#8E8E93] mt-1">
-            Configure OpenAthens credentials or pasted session tokens to proxy downloads through university firewalls.
+            Paste your browser session cookies to proxy downloads through university firewalls.
           </p>
-        </div>
-        <div className="flex items-center space-x-1.5 bg-[#0A84FF]/10 border border-[#0A84FF]/20 px-3 py-1.5 rounded-xl text-[11px] text-[#0A84FF] font-medium">
-          <Shield className="w-3.5 h-3.5" />
-          <span>AES-256 Encrypted Local Memory</span>
         </div>
       </div>
 
@@ -79,53 +69,6 @@ export default function OpenAthensPanel({ config, onUpdateConfig }: OpenAthensPa
                 className="w-full bg-[#0F0F0F] border border-[#2A2A2A] rounded-lg py-2 px-3 text-xs text-[#E0E0E0] placeholder:text-zinc-650 focus:outline-none focus:border-[#0A84FF] transition-colors"
               />
             </div>
-          </div>
-
-          {/* OpenAthens Direct Credentials */}
-          <div className="bg-[#0F0F0F] border border-[#2A2A2A] rounded-xl p-4 space-y-4">
-            <div className="flex items-center space-x-2">
-              <Shield className="w-4 h-4 text-[#28C840]" />
-              <span className="text-[10px] font-bold text-white uppercase tracking-wider">https://login.openathens.net/auth/gen Login</span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-[#8E8E93] uppercase tracking-wider">User ID / Username</label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="e.g. jdoe123"
-                  className="w-full bg-[#161616] border border-[#2A2A2A] rounded-lg py-2 px-3 text-xs text-[#E0E0E0] placeholder:text-zinc-600 focus:outline-none focus:border-[#28C840] transition-colors"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-[#8E8E93] uppercase tracking-wider">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  className="w-full bg-[#161616] border border-[#2A2A2A] rounded-lg py-2 px-3 text-xs text-[#E0E0E0] placeholder:text-zinc-600 focus:outline-none focus:border-[#28C840] transition-colors"
-                />
-              </div>
-            </div>
-
-            <label className="flex items-start space-x-2.5 pt-1.5 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={autoChooseOpenAthens}
-                onChange={(e) => setAutoChooseOpenAthens(e.target.checked)}
-                className="mt-0.5 rounded border-[#2A2A2A] bg-[#161616] text-[#28C840] focus:ring-[#28C840] w-3.5 h-3.5"
-              />
-              <div className="text-[11px] leading-snug">
-                <span className="text-white font-medium block">Always prioritize OpenAthens authentications</span>
-                <span className="text-[#8E8E93] text-[10px] block mt-0.5">
-                  Always choose OpenAthens login automatically whenever any publisher journal platform asks for institutional / university access.
-                </span>
-              </div>
-            </label>
           </div>
 
           {/* Session Cookies */}

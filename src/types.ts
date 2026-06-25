@@ -34,9 +34,6 @@ export interface OpenAthensConfig {
   portalUrl: string;
   cookies: string;
   customHeaders: string;
-  username?: string;
-  password?: string;
-  autoChooseOpenAthens?: boolean;
 }
 
 export interface DownloadStats {
